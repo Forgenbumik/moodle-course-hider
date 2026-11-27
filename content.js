@@ -1,5 +1,6 @@
 (function () {
-  const Shared = window.MPCHShared;
+  // В Firefox в контент-скриптах window !== globalThis, а shared.js пишет в globalThis.
+  const Shared = globalThis.MPCHShared || window.MPCHShared;
   if (!Shared) return;
 
   // Prevent flicker before storage resolves.
@@ -615,8 +616,14 @@
     }
   }
 
-  if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.onChanged) {
-    chrome.storage.onChanged.addListener((changes) => {
+  const extApi =
+    typeof browser !== 'undefined' && browser.storage
+      ? browser
+      : typeof chrome !== 'undefined'
+        ? chrome
+        : null;
+  if (extApi && extApi.storage && extApi.storage.onChanged) {
+    extApi.storage.onChanged.addListener((changes) => {
       if (changes[Shared.STORAGE_KEY]) {
         state = Shared.sanitizeState(changes[Shared.STORAGE_KEY].newValue);
         applyVisibilityOnly();

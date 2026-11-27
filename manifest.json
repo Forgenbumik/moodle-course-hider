@@ -6,6 +6,18 @@
   "permissions": [
     "storage"
   ],
+  "host_permissions": [
+    "https://online.mospolytech.ru/*"
+  ],
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "moodle-course-hider@forgenbumik.github.io",
+      "strict_min_version": "115.0",
+      "data_collection_permissions": {
+        "required": ["none"]
+      }
+    }
+  },
   "icons": {
     "16": "icons/icon16.png",
     "48": "icons/icon48.png",
