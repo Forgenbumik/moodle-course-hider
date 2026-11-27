@@ -129,16 +129,24 @@
     return { hidden: false, reason: null, rule: null };
   }
 
+  // Firefox предоставляет promise-API как `browser`, Chrome — как `chrome`.
+  const api =
+    typeof browser !== 'undefined' && browser.storage
+      ? browser
+      : typeof chrome !== 'undefined'
+        ? chrome
+        : null;
+
   function getStorageArea() {
-    if (typeof chrome !== 'undefined' && chrome.storage) {
-      return chrome.storage.sync || chrome.storage.local;
+    if (api && api.storage) {
+      return api.storage.sync || api.storage.local;
     }
     return null;
   }
 
   function getLocalArea() {
-    if (typeof chrome !== 'undefined' && chrome.storage) {
-      return chrome.storage.local || chrome.storage.sync;
+    if (api && api.storage) {
+      return api.storage.local || api.storage.sync;
     }
     return null;
   }

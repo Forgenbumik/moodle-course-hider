@@ -217,7 +217,18 @@
   });
 
   const importFileInput = document.getElementById('import-file');
-  document.getElementById('import-btn').addEventListener('click', () => importFileInput.click());
+  document.getElementById('import-btn').addEventListener('click', () => {
+    // В Firefox popup закрывается при открытии диалога выбора файла,
+    // поэтому импорт выполняется на отдельной вкладке с той же страницей.
+    const isFullTab = new URLSearchParams(location.search).has('full');
+    const ext = typeof browser !== 'undefined' ? browser : chrome;
+    if (!isFullTab && navigator.userAgent.includes('Firefox') && ext.tabs && ext.tabs.create) {
+      ext.tabs.create({ url: ext.runtime.getURL('popup.html?full=1#backup') });
+      window.close();
+      return;
+    }
+    importFileInput.click();
+  });
   importFileInput.addEventListener('change', async () => {
     const file = importFileInput.files?.[0];
     if (!file) return;
@@ -247,4 +258,10 @@
   renderHeader();
   renderCourses();
   renderRules();
+  // Открытие нужной вкладки по хэшу (например, popup.html#backup).
+  const hashTab = location.hash.replace('#', '');
+  if (hashTab) {
+    const tabBtn = document.querySelector(`.tab[data-tab="${hashTab}"]`);
+    if (tabBtn) tabBtn.click();
+  }
 })();
