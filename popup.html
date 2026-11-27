@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Фильтр курсов СДО</title>
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+  <header class="header">
+    <div class="header-title">
+      <h1>Фильтр курсов СДО</h1>
+      <span id="summary-badge" class="badge">Скрыто: 0</span>
+    </div>
+    <label class="switch" title="Включить или временно отключить скрытие курсов">
+      <input type="checkbox" id="enabled-toggle" />
+      <span class="slider"></span>
+    </label>
+  </header>
+
+  <nav class="tabs" role="tablist">
+    <button type="button" class="tab active" data-tab="courses">Курсы</button>
+    <button type="button" class="tab" data-tab="rules">По названию</button>
+    <button type="button" class="tab" data-tab="backup">Бэкап</button>
+  </nav>
+
+  <main class="main">
+    <section id="tab-courses" class="tab-panel active">
+      <div class="search-row">
+        <input type="text" id="course-search" class="input" placeholder="Поиск курса или категории..." />
+        <label class="only-hidden-label">
+          <input type="checkbox" id="only-hidden-toggle" />
+          <span>Скрытые</span>
+        </label>
+      </div>
+      <div id="courses-list" class="courses-list"></div>
+    </section>
+
+    <section id="tab-rules" class="tab-panel">
+      <p class="hint">
+        Каждая строка — слово или фраза из названия курса (регистр не важен).
+        Начните строку с <code>=</code> для точного совпадения.
+      </p>
+      <div class="add-row">
+        <input type="text" id="quick-rule-input" class="input" placeholder="Например: Анкетирование" />
+        <button type="button" id="quick-rule-add" class="btn btn-primary">Добавить</button>
+      </div>
+      <textarea id="rules-textarea" class="textarea" placeholder="Анкетирование&#10;Входное тестирование&#10;Базовая грамматика"></textarea>
+      <div class="actions-row">
+        <button type="button" id="save-rules-btn" class="btn btn-primary">Сохранить список</button>
+        <span id="rules-status" class="status-text"></span>
+      </div>
+    </section>
+
+    <section id="tab-backup" class="tab-panel">
+      <p class="hint">
+        Все изменения сохраняются автоматически в Chrome Storage (и синхронизируются между вашими устройствами в одном профиле Chrome). Здесь можно сделать резервную копию.
+      </p>
+      <div class="backup-actions">
+        <button type="button" id="export-btn" class="btn">Скачать JSON</button>
+        <button type="button" id="copy-json-btn" class="btn">Скопировать JSON</button>
+        <button type="button" id="import-btn" class="btn">Загрузить JSON</button>
+        <input type="file" id="import-file" accept=".json,application/json" hidden />
+      </div>
+      <div class="danger-zone">
+        <button type="button" id="clear-all-btn" class="btn btn-danger">Сбросить все скрытые курсы</button>
+      </div>
+      <div id="backup-status" class="status-text"></div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <a href="https://online.mospolytech.ru/my/courses.php" target="_blank" rel="noreferrer">Открыть «Мои курсы» СДО</a>
+  </footer>
+
+  <script src="shared.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>
